@@ -3,8 +3,15 @@
 ## Install
 
 ```
-npm install bookdown
+$ git clone https://github.com/ccckmit/bookdown.git
+...
+$ cd bookdown
+$ npm install
+...
+$ node server
 ```
+
+visit http://localhost:3000/ for a demo book.
 
 ## License
 

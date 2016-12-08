@@ -39,6 +39,7 @@ converter.setOption('tables', true);
 app.use(serve(path.join(__dirname, 'web')));
 app.use(serve(userPath));
 
+app.use(route.get('/', function*() { this.redirect('/view/markdown/README.md') }));
 app.use(route.get('/view/:book/:file', view));
 
 
