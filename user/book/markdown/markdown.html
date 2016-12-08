@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A layout example with a side menu that hides on mobile, just like the Pure website.">
+    <title>Responsive Side Menu &ndash; Layout Examples &ndash; Pure</title>
+    
+    <link rel="stylesheet" href="https://unpkg.com/purecss@0.6.0/build/pure-min.css">
+    
+    
+    
+        <!--[if lte IE 8]>
+            <link rel="stylesheet" href="css/layouts/side-menu-old-ie.css">
+        <![endif]-->
+        <!--[if gt IE 8]><!-->
+            <link rel="stylesheet" href="../../css/layouts/side-menu.css">
+        <!--<![endif]-->
+</head>
+<body>
+
+
+
+
+
+
+<div id="layout">
+    <!-- Menu toggle -->
+    <a href="#menu" id="menuLink" class="menu-link">
+        <!-- Hamburger icon -->
+        <span></span>
+    </a>
+
+    <div id="menu">
+        <div class="pure-menu">
+            <a class="pure-menu-heading" href="README.md">MD 寫作手冊</a>
+            <ul class="pure-menu-list">
+						    <li class="pure-menu-item"><a href="README.md" class="pure-menu-link">前言</a></li>
+						    <li class="pure-menu-item"><a href="markdown.md" class="pure-menu-link">基本語法</a></li>
+						    <li class="pure-menu-item"><a href="table.md" class="pure-menu-link">表格</a></li>
+						    <li class="pure-menu-item"><a href="math.md" class="pure-menu-link">數學式</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="main">
+			<div class="content">
+			  <h1 id="1">第1層標題</h1>
+<h2 id="2">第2層標題</h2>
+<h3 id="3">第3層標題</h3>
+<p>內文, <em>強調</em> , <em>強調</em>, <strong>超強調</strong>, <strong>超強調</strong> , </p>
+<p>水平線</p>
+<hr />
+<p>無號項目</p>
+<ul>
+<li>項目1</li>
+<li>項目2</li>
+<li>項目3</li>
+</ul>
+<p>編號項目</p>
+<ol>
+<li>項目1</li>
+<li>項目2</li>
+<li>項目3</li>
+</ol>
+<p>yahoo: <a href="http://tw.yahoo.com/">Yahoo</a>.</p>
+<p><img src="CC-BY-SA_icon.svg" alt="" /></p>
+			</div>
+    </div>
+</div>
+
+
+
+
+<script src="../../js/ui.js"></script>
+
+</body>
+</html>

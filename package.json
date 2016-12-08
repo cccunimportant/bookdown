@@ -1,0 +1,29 @@
+{
+  "name": "bookdown",
+  "version": "0.0.1",
+  "description": "Book Editing System for Markdown",
+  "main": "server.js",
+  "dependencies": {
+    "handlebars": "^4.0.6",
+    "koa": "^1.2.4",
+    "koa-route": "^2.4.2",
+    "koa-static": "^2.0.0",
+    "mz": "^2.6.0",
+    "showdown": "^1.5.1"
+  },
+  "devDependencies": {},
+  "scripts": {},
+  "bin": {},
+  "keywords": [],
+  "homepage": "https://github.com/ccckmit/bookdown",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/ccckmit/bookdown.git"
+  },
+  "author": {
+    "name": "Chung-Chen Chen",
+    "email": "ccckmit@gmail.com",
+    "url": "http://ccc.nqu.edu.tw"
+  },
+  "license": "MIT"
+}
