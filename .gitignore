@@ -12,6 +12,9 @@ bak
 # node 
 node_modules
 
+# database
+db
+
 # mac
 .DS_Store
 

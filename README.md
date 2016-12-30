@@ -8,10 +8,14 @@ $ git clone https://github.com/ccckmit/bookdown.git
 $ cd bookdown
 $ npm install
 ...
+$ mongod --dbpath <database_folder>
+...
 $ node server
 ```
 
-visit http://localhost:3000/ for a demo book.
+Visiting http://localhost/ for a demo site.
+
+If you do not start a mongodb server, bookdown will not save data into mongodb, but still can work on the file system.
 
 ## License
 
