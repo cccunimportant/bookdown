@@ -1,6 +1,6 @@
 {
   "name": "bookdown",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Book Editing System for Markdown",
   "main": "server.js",
   "dependencies": {
