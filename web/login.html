@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="A layout example with a side menu that hides on mobile, just like the Pure website.">
+	<title>Bookdown : login</title>
+	<link rel="stylesheet" href="/css/pure-min.css">
+</head>
+<body style="margin:20vh 0px 0px 20vw">
+	<h1 style="margin:0px 0px 20px 100px">Bookdown : Login</h1>
+	<form class="pure-form pure-form-aligned">
+		<fieldset>
+			<div class="pure-control-group">
+				<label for="user">User</label>
+				<input id="user" type="text" placeholder="User">
+			</div>
+
+			<div class="pure-control-group">
+				<label for="password">Password</label>
+				<input id="password" type="password" placeholder="Password">
+			</div>
+
+			<div class="pure-controls">
+				<button type="button" class="pure-button pure-button-primary" onclick="doLogin()">Submit</button>
+				<button type="button" class="pure-button pure-button-primary" onclick="doBack()">Back</button>
+			</div>
+		</fieldset>
+  </form>
+<script>
+var user     = document.getElementById("user");
+var password = document.getElementById("password");
+function doLogin() {
+  login(user.value, password.value);
+}
+function doBack() {
+  window.history.back();
+}
+</script>
+<script src="/bookdown.js"></script>	
+</body>
+</html>

@@ -1,0 +1,12 @@
+{
+  "title":"Bookdown - 書的世界",
+  "parts":[
+    {"title":"登入", "link":"login.md"},
+    {"title":"註冊", "link":"signup.md"},
+    {"title":"寫書", "link":"createBook.md"},
+    {"title":"登出", "link":"logout.md"},
+    {"title":"書籍", "link":"booklist.md"},
+    {"title":"作者", "link":"userlist.md"}
+  ]
+}
+

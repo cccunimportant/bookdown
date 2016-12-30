@@ -1,0 +1,10 @@
+{
+  "title":"八極語",
+  "parts":[
+    {"title":"簡介", "link":"README.md"},
+    {"title":"八極語法", "link":"grammar.md"},
+    {"title":"八極語機器翻譯", "link":"mt.md"},
+    {"title":"對話範例", "link":"example.md"}
+  ]
+}
+

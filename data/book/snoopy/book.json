@@ -1,0 +1,8 @@
+{
+  "title":"Snoopy",
+  "parts":[
+    {"title":"About Snoopy", "link":"README.md"},
+    {"title":"Book List",    "link":"booklist.md"}
+  ]
+}
+

@@ -1,0 +1,11 @@
+{
+  "title":"歷史年表",
+  "parts":[
+    {"title":"簡介", "link":"README.md"},
+    {"title":"科學史", "link":"science.md"},
+    {"title":"技術史", "link":"technology.md"},
+    {"title":"武器史", "link":"weapon.md"},
+    {"title":"數學史", "link":"math.md"}
+  ]
+}
+

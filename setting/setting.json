@@ -1,0 +1,7 @@
+{
+  "port":80,
+  "portSsl":443,
+  "users":{
+	  "ccc":{ "password":"1234" }
+	}
+}
