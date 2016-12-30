@@ -17,7 +17,9 @@
     "showdown": "^1.5.1"
   },
   "devDependencies": {},
-  "scripts": {},
+  "scripts": {
+    "start": "node server.js"
+  },
   "bin": {},
   "keywords": [],
   "homepage": "https://github.com/ccckmit/bookdown",
