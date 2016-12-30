@@ -13,7 +13,7 @@ $ mongod --dbpath <database_folder>
 $ node server
 ```
 
-Visiting http://localhost/ for a demo site.
+Visiting https://localhost/ for a demo site.
 
 If you do not start a mongodb server, bookdown will not save data into mongodb, but still can work on the file system.
 
