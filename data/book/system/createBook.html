@@ -19,9 +19,9 @@
 function createBook() {
   var bookBox = document.getElementById("book");
   ajaxGet("/createbook/"+bookBox.value, function(status, msg) {
-    console.log("msg=", msg);
+    console.log("msg=", msg, " status=", status);
     alert(msg);
-    window.location.href='/view/'+bookBox.value+'/';
+    if (status === 200) window.location.href='/view/'+bookBox.value+'/';
   });
 }
 </script>

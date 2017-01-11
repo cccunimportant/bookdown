@@ -1,8 +1,0 @@
-{
-  title:system,
-  parts:[
-    {title:README,   link:"README.md"},
-    {title:booklist, link:"booklist.md"},
-    {title:userlist, link:"userlist.md"},
-  ]
-}

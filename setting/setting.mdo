@@ -1,0 +1,19 @@
+port:80
+portSsl:443
+home:/view/system/README.md
+signup:true
+users:
+user     | password 
+---------|-----------
+system   | 1234
+ccc      | abcd
+user5 | user5123
+user6 | user6123
+user7 | user7123
+user8 | user8123
+user9 | user9123
+user10 | user10123
+user11 | user11123
+user12 | user12123
+user13 | user13
+fanny | fanny
