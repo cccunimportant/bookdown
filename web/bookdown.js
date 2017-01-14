@@ -26,6 +26,9 @@ function load(pBook, pFile) {
 			showBox(searchBox);
 		}
 	});
+  
+  initDictionary('zh', zh);
+  setLocale(localStorage.locale);
 }
 
 window.onhashchange = function() {
@@ -78,11 +81,14 @@ function ajaxPost(path, obj) {
   r.open("POST", path, true);
   r.onreadystatechange = function () {
 		if (r.readyState != 4) return;
+		alert(mt(r.responseText, localStorage.locale));
+/*    
     if (r.status != 200) {
 			alert("Fail: " + r.responseText);
 		} else {
 			alert("Success: " + r.responseText);
 		}
+*/    
   };
   r.send(JSON.stringify(obj));
 }
@@ -100,26 +106,9 @@ function fileRender(text) {
   }
 }
 
-/*
-function markdownRender(md) {
-  md = md.trim();
-	if (md.startsWith("<")) // html
-		return md;
-	else {
-    if (md.startsWith("{"))
-      md = '```json\n'+md+'\n```';
-		return converter.makeHtml(md);    
-  }
-}
-*/
 function render() {
   var html = texRender(textBox.value);
   viewBox.innerHTML = fileRender(html);
-  
-/*  
-  var html = markdownRender(textBox.value);
-  viewBox.innerHTML = texRender(html);
-*/  
 }
 
 function view() {
@@ -153,6 +142,75 @@ function search(key) {
 
 function logout() {
   ajaxPost("/logout", {});
+}
+
+// ====================== MT ====================================
+var zh = {
+  "menu":"選單",
+  "edit":"編輯",
+  "view":"檢視",
+  "save":"存檔",
+  "signup":"註冊",
+  "login":"登入",
+  "logout":"登出",
+  "home":"首頁",
+  "book":"書籍",
+  "search":"搜尋",
+  "locale":"語言",
+  "bookdown":"易書網",
+  "Create Book":"創建新書",
+  "users":"使用者",
+  "books":"書籍",
+  "Contents":"內容",
+  "# Error\nFile not found.\nYou may edit and save to create a new file !":"# 錯誤\n檔案不存在.\n你可以編輯後存檔以創建新檔案！",
+  "Please login to save!":"請先登入後才能存檔！",
+  "Save fail: You are not editor of the book !":"存檔失敗：你不是本書的編輯！",
+  "Save Success!":"存檔成功",
+  "Save Fail!":"存檔失敗",
+  "Signup success!":"註冊成功",
+  "Signup Fail: User name already taken by some others!":"註冊失敗:該名稱已被佔用！",
+  "Login Success!":"登入成功！",
+  "Login Fail!":"登入失敗！",
+  "Logout Success!":"登出成功！",
+  "Please login at first !":"請先登入！",
+  "Create Book Success!":"創建書籍成功！",
+  "Fail: Book already exist!":"登入失敗！",
+  "Bookdown User Guide":"Bookdown 使用手冊",
+  "Preface":"前言",
+  "Syntax":"語法",
+  "Table":"表格",
+  "Math":"數學",
+  "Object":"物件",
+}
+
+var dictionary = {}
+
+function initDictionary(locale, dic) {
+  var d = {}
+  for (var e in dic) {
+    d[e.toLowerCase()] = dic[e];
+  }
+  dictionary[locale] = d;
+}
+
+function setLocale(locale) {
+  localStorage.locale = locale;
+  var nodes = document.getElementsByClassName("mt");
+  for (var i = 0; i < nodes.length; i++) {
+    var node = nodes[i];
+    var e = node.getAttribute('data-mt');
+    var eMt = mt(e, locale);
+    node.innerHTML = eMt;
+//    console.log("e=%s eMt=%s", e, eMt);
+  }
+}
+
+function mt(msg, locale) {
+  if (typeof locale === 'undefined') return msg;
+  var d = dictionary[locale];
+  if (typeof d === 'undefined') return msg;
+  var msgMt = d[msg.toLowerCase()];
+  return (typeof msgMt === 'undefined')?msg:msgMt;
 }
 
 /*
@@ -238,3 +296,23 @@ function texRender(text) {
   return tex2;
 }
 */
+
+
+/*
+function markdownRender(md) {
+  md = md.trim();
+	if (md.startsWith("<")) // html
+		return md;
+	else {
+    if (md.startsWith("{"))
+      md = '```json\n'+md+'\n```';
+		return converter.makeHtml(md);    
+  }
+}
+*/
+
+  
+/*  
+  var html = markdownRender(textBox.value);
+  viewBox.innerHTML = texRender(html);
+*/  

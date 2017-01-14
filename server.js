@@ -1,28 +1,40 @@
-var http    = require('http');
-var https   = require('https');
-var fs      = require('mz/fs');
-var co      = require('co');
-var koa     = require('koa');
-var serve   = require('koa-static');
-var route   = require('koa-route');
-var cobody  = require('co-body');
-var path    = require('path');
-var session = require('koa-session');
+var http    = require("http");
+var https   = require("https");
+var fs      = require("mz/fs");
+var co      = require("co");
+var koa     = require("koa");
+var serve   = require("koa-static");
+var route   = require("koa-route");
+var cobody  = require("co-body");
+var path    = require("path");
+var session = require("koa-session");
 var app     = koa();
 var io      = require("./lib/io");
 var M       = require("./lib/model");
 var V       = require("./lib/view");
+// var MT      = require("./lib/mt");
+
+/*
+var mt = function(self, msg) {
+  console.log("this.session=%j", self.session);
+  return MT.mt(msg, self.session.locale);
+}
+*/
 
 var response=function(self, code, msg) {
+//  console.log("this.session=%j", self.session);
+//  var msgMt = mt(self, msg);
+  var msgMt = msg;
 	var res = self.response;
   res.status = code;
-  res.set({'Content-Length':''+msg.length,'Content-Type':'text/plain'});
-  res.body = msg;
-  if (code !== 200) console.log('response error : ', code, msg);
+  res.set({"Content-Length":""+msgMt.length,"Content-Type":"text/plain"});
+  res.body = msgMt;
+  console.log("msgMt=%s", msgMt);
+  if (code !== 200) console.log("response error : ", code, msgMt);
 }
 
 var isPass = function(self) {
-  return typeof(self.session.user)!=='undefined';
+  return typeof(self.session.user)!=="undefined";
 }
 
 var parse = function *(self) {
@@ -30,15 +42,20 @@ var parse = function *(self) {
 	return JSON.parse(json);
 }
 
+var setLocale = function*(locale) {
+  this.session.locale = locale;
+  console.log("this.session.locale=%j", this.session.locale);
+}
+
 var view = function *(book, file="README.md") { // view(mdFile):convert *.md to html
   console.log("view:book=%s file=%s", book, file);
 	var type = path.extname(file);
-  if (['.md', '.json', '.mdo', '.html'].indexOf(type)>=0) {
+  if ([".md", ".json", ".mdo", ".html"].indexOf(type)>=0) {
     var fileObj, bookObj = yield M.getBook(book);
 		try {
 			fileObj = yield M.getBookFile(book, file);
 		} catch (error) {
-			fileObj = { book:book, file:file, text:"File not found.\nYou may edit and save to create a new file !" };
+			fileObj = { book:book, file:file, text:"# Error\nFile not found.\nYou may edit and save to create a new file !" };
 		}
 		var page = V.viewRender(bookObj, fileObj);
 		this.body = page;
@@ -50,21 +67,21 @@ var view = function *(book, file="README.md") { // view(mdFile):convert *.md to 
 
 var save = function *(book, file) { // save markdown file.
   if (!isPass(this)) {
-    response(this, 401, 'Please login to save!');
+    response(this, 401, "Please login to save!");
     return;
   }
   var bookObj = yield M.getBook(book);
   if (bookObj.editor !== this.session.user) {
-    response(this, 403, 'Save Fail: You are not the editor of book ['+book+']!');
+    response(this, 403, "Save fail: You are not editor of the book !");
     return;
   }  
   try {
     var post = yield parse(this);
-    console.log("save:%s/%s\npost=%j", book, file, post.text);
+//    console.log("save:%s/%s\npost=%j", book, file, post.text);
     yield M.saveBookFile(book, file, post.text);
-    response(this, 200, 'Save Success!');
+    response(this, 200, "Save Success!");
   } catch (e) {
-    response(this, 403, 'Save Fail!'); // 403: Forbidden
+    response(this, 403, "Save Fail!"); // 403: Forbidden
   }
 }
 
@@ -74,9 +91,9 @@ var signup = function *() {
   console.log("post=%j", post);
   var isSuccess = yield M.addUser(user, password);
   if (isSuccess) {
-    response(this, 200, 'Success: Signup success!');
+    response(this, 200, "Signup success!");
   } else {
-    response(this, 403, 'Fail: User name occupied!');
+    response(this, 403, "Signup Fail: User name already taken by some others!");
   }
 }
 
@@ -92,48 +109,50 @@ var search = function *() {
 }
 
 var userList = function *() {
-  var lines = ['<ol>'];
+  var lines = ["<ol>"];
   for (var user in M.users) {
-    lines.push(' <li><a href="/view/book/'+user+'/README.md">'+user+'</a></li>');
+    lines.push(" <li><a href=\"/view/book/"+user+"/README.md\">"+user+"</a></li>");
   }
-  lines.push('</ol>');
-  response(this, 200, lines.join('\n'));
+  lines.push("</ol>");
+  response(this, 200, lines.join("\n"));
 }
 
 var login = function *() {
   var post = yield parse(this);
 	console.log("login:post=%s", JSON.stringify(post));
 	var user = M.users[post.user];
+  console.log("this.session=%j", this.session);
 	if (user.password === post.password) {
-    response(this, 200, 'Login Success!');
+    response(this, 200, "Login Success!");
     this.session.user = post.user;
 	}
   else
-    response(this, 403, 'Login Fail!'); // 403: Forbidden
+    response(this, 403, "Login Fail!"); // 403: Forbidden
+  console.log("this.session=%j", this.session);
 }
 
 var logout =function *() {
 	delete this.session.user;
-	response(this, 200, 'Logout Success!');
+	response(this, 200, "Logout Success!");
 }
 
 var createBook = function*(book) {
   if (!isPass(this)) {
-    response(this, 401, 'Please login to create book!');
+    response(this, 401, "Please login at first !");
   } else {
     try {
       yield M.createBook(book, this.session.user);
-      response(this, 200, 'Success: Create Book!');
+      response(this, 200, "Create Book Success!");
     } catch (err) {
-      response(this, 403, 'Fail: Book already exist!');
+      response(this, 403, "Fail: Book already exist!");
     }
   }
 }
 
-app.keys = ['#*$*#$)_)*&&^^'];
+app.keys = ["#*$*#$)_)*&&^^"];
 
 var CONFIG = {
-  key: 'koa:sess', // (string) cookie key (default is koa:sess)
+  key: "koa:sess", // (string) cookie key (default is koa:sess)
   maxAge: 86400000, // (number) maxAge in ms (default is 1 days)
   overwrite: true, // (boolean) can overwrite or not (default true)
   httpOnly: true, // (boolean) httpOnly or not (default true)
@@ -141,31 +160,33 @@ var CONFIG = {
 };
 
 app.use(session(CONFIG, app));;
-app.use(serve('web'));
-app.use(serve('user'));
+app.use(serve("web"));
+app.use(serve("user"));
 
-app.use(route.get('/', function*() { this.redirect(M.setting.home) }));
-app.use(route.get('/view/:book/:file?', view));
-app.use(route.post('/save/:book/:file', save));
-app.use(route.post('/signup', signup));
-app.use(route.get('/createbook/:book', createBook));
-app.use(route.post('/createbook/:book', createBook));
-app.use(route.post('/login', login));
-app.use(route.post('/logout', logout));
-app.use(route.get('/search', search));
-app.use(route.get('/userlist', userList));
+app.use(route.get("/", function*() { this.redirect(M.setting.home) }));
+app.use(route.get("/view/:book/:file?", view));
+app.use(route.get("/locale/:locale", setLocale));
+app.use(route.post("/save/:book/:file", save));
+app.use(route.post("/signup", signup));
+app.use(route.get("/createbook/:book", createBook));
+app.use(route.post("/createbook/:book", createBook));
+app.use(route.post("/login", login));
+app.use(route.post("/logout", logout));
+app.use(route.get("/search", search));
+app.use(route.get("/userlist", userList));
 
 co(function*() {
 	yield M.init(__dirname);
 	V.init(__dirname);
+//  MT.init();
 	var port = M.setting.port || 80;
 	http.createServer(app.callback()).listen(port);
   // https version : in self signed certification
   // You can save & modify in SSL mode, no edit allowed in HTTP mode.
 	var sslPort = M.setting.portSsl || 443;
-  var keyPem  = yield io.readFile('setting/key.pem');
-  var certPem = yield io.readFile('setting/cert.pem');
-  var csrPem  = yield io.readFile('setting/csr.pem');
+  var keyPem  = yield io.readFile("setting/key.pem");
+  var certPem = yield io.readFile("setting/cert.pem");
+  var csrPem  = yield io.readFile("setting/csr.pem");
 	https.createServer({
 		key: keyPem,
 		cert: certPem, 
@@ -173,6 +194,6 @@ co(function*() {
 		requestCert: true, 
 		ca: [ csrPem ]
 	}, app.callback()).listen(sslPort);
-	console.log('http  server started: http://localhost:'+port);
-	console.log('https server started: http://localhost:'+sslPort);
+	console.log("http  server started: http://localhost:"+port);
+	console.log("https server started: http://localhost:"+sslPort);
 });

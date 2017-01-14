@@ -1,10 +1,10 @@
-title:Markdown 寫作手冊
+title:Bookdown User Guide
 editor:ccc
 chapters:
 title    | link
 ---------|---------
-前言     | README.md
-基本語法 | markdown.md
-表格     | table.md
-數學式   | math.md
-物件     | mdo.md
+Preface  | README.md
+Syntax   | markdown.md
+Table    | table.md
+Math     | math.md
+Object   | mdo.md
