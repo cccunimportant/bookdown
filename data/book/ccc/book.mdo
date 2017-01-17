@@ -1,7 +1,14 @@
-title:陳鍾誠
+title:陳鍾誠 @ Bookdown
 editor:ccc
+locale:zh
 chapters:
-title    | link
----------|---------
-履歷     | README.md
-書籍     | booklist.md
+title      | link
+-----------|---------
+陳鍾誠     | README.md
+課程地圖   | course.md
+書籍著作   | booklist.md
+程式作品   | codelist.md
+小說故事   | novel.md
+散文記事   | article.md
+論文研究   | paper.md
+十分鐘系列 | slide.md

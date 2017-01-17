@@ -16,7 +16,6 @@ function load(pBook, pFile) {
   converter = new showdown.Converter();
   converter.setOption('tables', true);
   render();
-//  viewBox.innerHTML = texRender(viewBox.innerHTML);
 	
 	searchQuery.addEventListener("keyup", function(event) {
 		event.preventDefault();
@@ -28,7 +27,7 @@ function load(pBook, pFile) {
 	});
   
   initDictionary('zh', zh);
-  setLocale(localStorage.locale);
+  pageToLocale();
 }
 
 window.onhashchange = function() {
@@ -51,17 +50,20 @@ function texRender(text) {
   if (!katexLoaded && text.indexOf("$$")>=0) {
     katexLoaded = true;
   }
-  return text.replace(/(```\n[\s\S]*\n```)|(`[^`\n]*`)|(\$\$\s*\n\s*([^$]+)\s*\n\s*\$\$)|(\$\$([^$\n]+)\$\$)/gmi, function(match, p1, p2, p3, p4, p5, p6, offset, str) {
-    if (typeof p1 !== 'undefined') {
-      return match;
-    } else if (typeof p2 !== 'undefined') {
-      console.log("` match=%s", match);
-      return match;
-    } else if (typeof p3 !== 'undefined') {
-      return katex.renderToString(p4, { displayMode: true });      
-    } else if (typeof p5 !== 'undefined') {
-      return katex.renderToString(p6);
-    }
+  return text.replace(/(```\w*\n([\s\S]*?)\n```)|(`[^`\n]*`)|(\$\$\s*\n\s*([^$]+)\s*\n\s*\$\$)|(\$\$([^$\n]+)\$\$)/gmi, function(match, p1, p2, p3, p4, p5, p6, p7, offset, str) {
+//    console.log("match=%s p5=%s p7=%s", match, p5, p7);
+    try {
+      if (typeof p1 !== 'undefined') {
+        return match;
+//          return hljs.highlightBlock(p2);
+      } else if (typeof p3 !== 'undefined') {
+        return match;
+      } else if (typeof p4 !== 'undefined') {
+        return katex.renderToString(p5, { displayMode: true });      
+      } else if (typeof p6 !== 'undefined') {
+        return katex.renderToString(p7);
+      }
+    } catch (err) {}
   });
 }
 
@@ -70,25 +72,25 @@ function ajaxGet(path, getResponse) {
   r.open("GET", path, true);
   r.onreadystatechange = function () {
 		if (r.readyState != 4) return;
-//		getResponse(r.status, JSON.parse(r.responseText));
 		getResponse(r.status, r.responseText);
   };
 	r.send(null);
 }
 
-function ajaxPost(path, obj) {
+function ajaxPost(path, obj, callback) {
   var r = new XMLHttpRequest();
   r.open("POST", path, true);
   r.onreadystatechange = function () {
 		if (r.readyState != 4) return;
 		alert(mt(r.responseText, localStorage.locale));
+    if (typeof callback !== 'undefined') callback(r);
 /*    
     if (r.status != 200) {
 			alert("Fail: " + r.responseText);
 		} else {
 			alert("Success: " + r.responseText);
 		}
-*/    
+*/
   };
   r.send(JSON.stringify(obj));
 }
@@ -106,14 +108,23 @@ function fileRender(text) {
   }
 }
 
+function codeHighlight() {
+  var codes = document.querySelectorAll('pre code');
+  for (var i=0; i<codes.length; i++) {
+    hljs.highlightBlock(codes[i]);
+  }
+}
+
 function render() {
   var html = texRender(textBox.value);
   viewBox.innerHTML = fileRender(html);
+  codeHighlight();
 }
 
 function view() {
   showBox(viewBox);
   render();
+  pageToLocale();
 }
 
 function edit() {
@@ -121,7 +132,10 @@ function edit() {
 }
 
 function save() {
-  ajaxPost('/save/'+book+'/'+file, {text:textBox.value});
+  ajaxPost('/save/'+book+'/'+file, {text:textBox.value}, function(r) {
+    if (r.status !== 200)
+      location.href="/view/system/login.html";
+  });
 }
 
 function search(key) {
@@ -141,7 +155,9 @@ function search(key) {
 }
 
 function logout() {
-  ajaxPost("/logout", {});
+  ajaxPost("/logout", {}, function(r) {
+    location.reload();
+  });
 }
 
 // ====================== MT ====================================
@@ -157,12 +173,19 @@ var zh = {
   "book":"書籍",
   "search":"搜尋",
   "locale":"語言",
-  "bookdown":"易書網",
   "Create Book":"創建新書",
   "users":"使用者",
   "books":"書籍",
   "Contents":"內容",
-  "# Error\nFile not found.\nYou may edit and save to create a new file !":"# 錯誤\n檔案不存在.\n你可以編輯後存檔以創建新檔案！",
+  "GoBack":"回前頁",
+  "User":"使用者",
+  "Author":"作者",
+  "Password":"密碼",
+  "Me":"私人",
+  "MyArea":"專區",
+  "System":"系統",
+  "Create Book":"寫書",
+  "Error: Signup=false in Setting.mdo !":"錯誤:設定檔的 signup=false !", 
   "Please login to save!":"請先登入後才能存檔！",
   "Save fail: You are not editor of the book !":"存檔失敗：你不是本書的編輯！",
   "Save Success!":"存檔成功",
@@ -181,6 +204,9 @@ var zh = {
   "Table":"表格",
   "Math":"數學",
   "Object":"物件",
+  "Welcome to Bookdown":"歡迎來到 Bookdown",
+  "Bookdown is a book writing system for Markdown.":"Bookdown 是一個採用 Markdown 語法的書籍撰寫系統。",
+  "Login and create your books !":"請登入後開始創建新書！",
 }
 
 var dictionary = {}
@@ -193,126 +219,28 @@ function initDictionary(locale, dic) {
   dictionary[locale] = d;
 }
 
-function setLocale(locale) {
-  localStorage.locale = locale;
+function pageToLocale(locale) {
+  if (typeof locale === 'undefined') 
+    locale = localStorage.locale;
+  else
+    localStorage.locale = locale;
   var nodes = document.getElementsByClassName("mt");
   for (var i = 0; i < nodes.length; i++) {
     var node = nodes[i];
     var e = node.getAttribute('data-mt');
     var eMt = mt(e, locale);
     node.innerHTML = eMt;
-//    console.log("e=%s eMt=%s", e, eMt);
   }
 }
 
 function mt(msg, locale) {
-  if (typeof locale === 'undefined') return msg;
   var d = dictionary[locale];
-  if (typeof d === 'undefined') return msg;
+  if (typeof locale === 'undefined' || typeof d==='undefined') return msg;
   var msgMt = d[msg.toLowerCase()];
   return (typeof msgMt === 'undefined')?msg:msgMt;
 }
 
 /*
-
-function texRender(text) {
-  if (!katexLoaded && text.indexOf("$$")>=0) {
-    katexLoaded = true;
-  }
-//  text = text.replace('\n', '__newline__');
-//  console.log("text=", text);
-
-  var tex1 = text.replace(/\s*\$\$\s*\n\s*([^$]+)\s*\n\s*\$\$\s/gmi, function(flag,match,end){
-    console.log("match=%s", match);
-    return katex.renderToString(match, { displayMode: true });
-  });
-  var tex2 = tex1.replace(/\$\$([^$]+)\$\$/gmi, function(flag,match,end){
-    return katex.renderToString(match);
-  });
-  
-  var tex1 = text.replace(/[^`>\s]\s*\$\$\s*\n\s*([^$]+)\s*\n\s*\$\$\s/gmi, function(flag,match,end) {
-    console.log("tex1:match=%s", match);
-//    return match;
-    return katex.renderToString(match, { displayMode: true });
-  });
-  var tex2 = tex1.replace(/[^`>\s]\s*\$\$([^$]+)\$\$/gmi, function(flag,match,end) {
-    console.log("tex2:match=%s", match);
-//    return match;
-    return katex.renderToString(match);
-  });
-
-  return tex2.replace('__newline__', '\n');
-  return tex2;
-}
-*/  
-/*
-function texRender(text) {
-  if (!katexLoaded && text.indexOf("$$")>=0) {
-    katexLoaded = true;
-  }
-  var tex1 = text.replace(/\$\$\s*\n\s*([^$]+)\s*\n\s*\$\$\s/gmi, function(match, p1, offset, str) {
-    if (str.substr(offset-2,2).indexOf('`')>=0) {
-      console.log("tex1: ``` match=%s p1=%s m=%s", match, p1, str.substr(offset, 10));
-      return match;
-    } else {
-      console.log("tex1: katex match=%s p1=%s m=%s", match, p1, str.substr(offset, 10));
-      return katex.renderToString(p1, { displayMode: true });      
-    }
-  });
-  var tex2 = tex1.replace(/\$\$([^$\n]+)\$\$/gmi, function(match, p1, offset, str) {
-    if (str.charAt(offset-1)==='`') {
-      console.log("tex2: ``` match=%s p1=%s m=%s", match, p1, str.substr(offset, 10));
-      return match;
-    } else {
-      console.log("tex2: katex match=%s p1=%s m=%s", match, p1, str.substr(offset, 10));
-      return katex.renderToString(p1);      
-    }
-  });
-  return tex2;
-}
-
-function texRender(text) {
-  if (!katexLoaded && text.indexOf("$$")>=0) {
-    katexLoaded = true;
-  }
-  var tex1 = text.replace(/(```)?\s*\$\$\s*\n\s*([^$]+)\s*\n\s*\$\$\s/gmi, function(match, p1, p2, offset, str) {
-    if (typeof p1 !== 'undefined') {
-      console.log("tex1: ``` match=%s p1=%s m=%s", match, p1, p2, str.substr(offset, 10));
-      return match;
-    } else {
-      console.log("tex1: katex match=%s p1=%s m=%s", match, p1, p2, str.substr(offset, 10));
-      return katex.renderToString(p2, { displayMode: true });      
-    }
-  });
-  var tex2 = tex1.replace(/(`)?\$\$([^$\n]+)\$\$/gmi, function(match, p1, p2, offset, str) {
-    if (typeof p1!=='undefined') {
-      console.log("tex2: ``` match=%s p1=%s m=%s", match, p1, p2, str.substr(offset, 10));
-      return match;
-    } else {
-      console.log("tex2: katex match=%s p1=%s m=%s", match, p1, p2, str.substr(offset, 10));
-      return katex.renderToString(p2);
-    }
-  });
-  return tex2;
-}
+  "# Error\nFile not found.\nYou may edit and save to create a new file !":"# 錯誤\n檔案不存在.\n你可以編輯後存檔以創建新檔案！",
+  "Error:Book not found. You may create a new book!":"錯誤:書籍不存在，您可以創建新書 !",
 */
-
-
-/*
-function markdownRender(md) {
-  md = md.trim();
-	if (md.startsWith("<")) // html
-		return md;
-	else {
-    if (md.startsWith("{"))
-      md = '```json\n'+md+'\n```';
-		return converter.makeHtml(md);    
-  }
-}
-*/
-
-  
-/*  
-  var html = markdownRender(textBox.value);
-  viewBox.innerHTML = texRender(html);
-*/  

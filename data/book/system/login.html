@@ -3,18 +3,18 @@
   <form class="pure-form pure-form-aligned"> 
     <fieldset>
       <div class="pure-control-group">
-        <label for="user">User</label>
+        <label for="user" class="mt" data-mt="User"></label>
         <input id="user" type="text" placeholder="User">
       </div>
 
       <div class="pure-control-group">
-        <label for="password">Password</label>
+        <label for="password" class="mt" data-mt="Password"></label>
         <input id="password" type="password" placeholder="Password">
       </div>
 
       <div class="pure-controls">
-        <button type="button" class="pure-button pure-button-primary" onclick="login()">Login</button>
-        <button type="button" class="pure-button pure-button-primary" onclick="window.history.back()">Back</button>
+        <button type="button" class="pure-button pure-button-primary mt" data-mt="Login" onclick="login()">Login</button>
+        <button type="button" class="pure-button pure-button-primary mt" data-mt="GoBack" onclick="window.history.back()"></button>
       </div>
     </fieldset>
   </form>     
@@ -26,6 +26,9 @@
 function login() {
   var userBox = document.getElementById("user");
   var passwordBox = document.getElementById("password");
-  ajaxPost("/login", {user:userBox.value, password:passwordBox.value});
+  ajaxPost("/login", {user:userBox.value, password:passwordBox.value}, function(r) {
+    window.history.back();
+//    location.reload();
+  });
 }
 </script>

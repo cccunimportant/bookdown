@@ -1,4 +1,14 @@
 Book                               |  Author
 -----------------------------------|------------------
-[Bookdown 寫作手冊](../bookdown/)  | [Chung-Chen Chen](../ccc/)
-[System](../system/)               | [root](../system/)
+[Regular English Grammar](../egrammar/)  | [Chung-Chen Chen](../ccc/)
+[Bookdown User Guide](../bookdown/)  | [Chung-Chen Chen](../ccc/)
+[System](../system/)               | [system](../system/)
+[egrammar](../egrammar/) | [system](../system/)
+[ccccourse](../ccccourse/) | [ccc](../ccc/)
+[learnagile](../learnagile/) | [ccc](../ccc/)
+[jsh](../jsh/) | [ccc](../ccc/)
+[nand2tetris](../nand2tetris/) | [ccc](../ccc/)
+[blender](../blender/) | [ccc](../ccc/)
+[csharp](../csharp/) | [ccc](../ccc/)
+[ai](../ai/) | [ccc](../ccc/)
+[st](../st/) | [ccc](../ccc/)

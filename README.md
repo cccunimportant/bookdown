@@ -4,12 +4,9 @@
 
 ```
 $ git clone https://github.com/ccckmit/bookdown.git
-...
 $ cd bookdown
 $ npm install
-...
-$ mongod --dbpath <database_folder>
-...
+$ mongod          // if you would like to store data in mongodb
 $ node server
 ```
 
@@ -21,7 +18,7 @@ If you do not start a mongodb server, bookdown will not save data into mongodb, 
 
 The Bookdown project is licensed in MIT license.
 
-Copyright (c) 2013 rlab
+Copyright (c) 2013 ccckmit
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

@@ -3,10 +3,17 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="A layout example with a side menu that hides on mobile, just like the Pure website.">
-    <title>Bookdown</title>
-    <link rel="stylesheet" href="/css/pure-min.css"> <!--https://unpkg.com/purecss@0.6.0/build/pure-min.css-->
-    <link rel="stylesheet" href="/katex/katex.min.css"> <!--https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.6.0/katex.min.css-->
+    <meta name="description" content="{{{book.title}}}">
+    <title>Bookdown: {{{book.title}}}</title>
+  {{#if useLocal}}
+    <link rel="stylesheet" href="/purecss/pure-min.css">
+    <link rel="stylesheet" href="/katex/katex.min.css">    
+    <link rel="stylesheet" href="/highlight/default.min.css">
+  {{else}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.2/pure-min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.6.0/katex.min.css">    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/default.min.css">  
+  {{/if}}
     <link rel="stylesheet" href="/main.css">
 </head>
 <body onload='load("{{{book.book}}}", "{{{file.file}}}")'>
@@ -18,22 +25,31 @@
     <li class="pure-menu-item"><a href="README.md" class="pure-menu-link mt" data-mt="{{{book.title}}}">{{{book.title}}}</a></li>
     <input id="searchQuery" type="text" placeholder="search" size="10" style="border-radius: 5px;">
     <li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover">
-      <a href="#" id="menuLink1" class="pure-menu-link mt" data-mt="Menu">Menu</a>
+      <a id="me" class="pure-menu-link">
+      {{#if user}}
+        {{{user}}}
+      {{else}}
+        👤
+      {{/if}}
+      </a>
       <ul class="pure-menu-children">
+        <li class="pure-menu-item"><a href="/myarea/" class="pure-menu-link mt" data-mt="MyArea">MyArea</a></li>
         <li class="pure-menu-item"><a onclick="view()" class="pure-menu-link mt" data-mt="View">View</a></li>
         <li class="pure-menu-item"><a onclick="edit()" class="pure-menu-link mt" data-mt="Edit">Edit</a></li>
         <li class="pure-menu-item"><a onclick="save()" class="pure-menu-link mt" data-mt="Save">Save</a></li>
-<!--    <li class="pure-menu-item"><a href="book.json" class="pure-menu-link">Book</a></li>-->
+        <li class="pure-menu-item"><a href="/view/system/createBook.html" class="pure-menu-link mt" data-mt="Create Book">Create Book</a></li>
         <li class="pure-menu-item"><a href="/view/system/login.html" class="pure-menu-link mt" data-mt="Login">Login</a></li>
         <li class="pure-menu-item"><a onclick="logout()" class="pure-menu-link mt" data-mt="Logout">Logout</a></li>
+        <li class="pure-menu-item"><a href="/view/{{{book.editor}}}/" class="pure-menu-link mt" data-mt="Author">Author</a></li>
+        <li class="pure-menu-item"><a href="/view/system/" class="pure-menu-link mt" data-mt="System">System</a></li>
         <li class="pure-menu-item"><a href="/" class="pure-menu-link mt" data-mt="Home">Home</a></li>
       </ul>
     </li>    
     <li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover">
       <a id="menuLink1" class="pure-menu-link mt" data-mt="Locale">Locale</a>
       <ul class="pure-menu-children">
-        <li class="pure-menu-item"><a onclick="setLocale('zh')" class="pure-menu-link">中文</a></li>
-        <li class="pure-menu-item"><a onclick="setLocale('en')" class="pure-menu-link">English</a></li>
+        <li class="pure-menu-item"><a onclick="pageToLocale('zh')" class="pure-menu-link">中文</a></li>
+        <li class="pure-menu-item"><a onclick="pageToLocale('en')" class="pure-menu-link">English</a></li>
       </ul>
     </li>
   </ul>
@@ -64,9 +80,16 @@
     </div>
   </div>
 </div>
-<script src="/js/ui.js"></script>
-<script src="/js/showdown.min.js"></script>
-<script src="/katex/katex.min.js"></script> <!-- https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.6.0/katex.min.js -->
-<script src="/js/marked.js"></script>
+
+  <script src="/purecss/ui.js"></script>
+{{#if useLocal}}
+  <script src="/showdown/showdown.min.js"></script>
+  <script src="/katex/katex.min.js"></script>
+  <script src="/highlight/highlight.min.js"></script>
+{{else}}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.6.0/showdown.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.6.0/katex.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"></script>
+{{/if}}
 </body>
 </html>

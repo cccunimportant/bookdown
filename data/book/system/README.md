@@ -1,10 +1,5 @@
-# Welcome to Bookdown
+<h1 class="mt" data-mt="Welcome to Bookdown"></h1>
 
-Bookdown is a book writing system in [Markdown](https://daringfireball.net/projects/markdown/) syntax.
+<p class="mt" data-mt="Bookdown is a book writing system for Markdown."></p>
 
-[Login](/view/system/login.md) and then [create your first book](/view/system/createBook.md)！
-
-The setting file is in the bookdown/setting/setting.json.
-You should modify the user/password in the setting.json. 
-
-The default user/password is root/1234.
+<p class="mt" data-mt="Login and create your books !"></p>

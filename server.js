@@ -29,8 +29,8 @@ var response=function(self, code, msg) {
   res.status = code;
   res.set({"Content-Length":""+msgMt.length,"Content-Type":"text/plain"});
   res.body = msgMt;
-  console.log("msgMt=%s", msgMt);
-  if (code !== 200) console.log("response error : ", code, msgMt);
+  console.log("response:msg=%s", msgMt);
+//  if (code !== 200) console.log("response error : ", code, msgMt);
 }
 
 var isPass = function(self) {
@@ -41,23 +41,32 @@ var parse = function *(self) {
 	var json = yield cobody(self);
 	return JSON.parse(json);
 }
-
+/*
 var setLocale = function*(locale) {
   this.session.locale = locale;
   console.log("this.session.locale=%j", this.session.locale);
 }
-
+*/
 var view = function *(book, file="README.md") { // view(mdFile):convert *.md to html
   console.log("view:book=%s file=%s", book, file);
 	var type = path.extname(file);
   if ([".md", ".json", ".mdo", ".html"].indexOf(type)>=0) {
-    var fileObj, bookObj = yield M.getBook(book);
-		try {
-			fileObj = yield M.getBookFile(book, file);
-		} catch (error) {
-			fileObj = { book:book, file:file, text:"# Error\nFile not found.\nYou may edit and save to create a new file !" };
-		}
-		var page = V.viewRender(bookObj, fileObj);
+    var bookObj, fileObj, isError=false;
+    try {
+      bookObj = yield M.getBook(book);
+    } catch (error) {
+      isError = true;
+      bookObj = { book:book };
+			fileObj = { book:book, file:file, text:"# Error\nBook not found.\nYou may [Create New Book](/view/system/createBook.html) ?" };
+    }
+    if (!isError) {
+      try {
+        fileObj = yield M.getBookFile(book, file);
+      } catch (error) {
+        fileObj = { book:book, file:file, text:"# Error\nFile not found.\nYou may edit and save to create a new file !" };
+      }      
+    }
+		var page = V.viewRender(bookObj, fileObj, M.setting.useLocal, this.session.user);
 		this.body = page;
 	} else {
 		this.type = path.extname(this.path);
@@ -86,6 +95,10 @@ var save = function *(book, file) { // save markdown file.
 }
 
 var signup = function *() {
+  if (!M.setting.signup) {
+    response(this, 403, "Error: Signup=false in Setting.mdo !");
+    return;
+  }
   var post = yield parse(this);
   var user = post.user, password = post.password;
   console.log("post=%j", post);
@@ -119,7 +132,7 @@ var userList = function *() {
 
 var login = function *() {
   var post = yield parse(this);
-	console.log("login:post=%s", JSON.stringify(post));
+	console.log("login:user=%s", post.user);
 	var user = M.users[post.user];
   console.log("this.session=%j", this.session);
 	if (user.password === post.password) {
@@ -165,7 +178,7 @@ app.use(serve("user"));
 
 app.use(route.get("/", function*() { this.redirect(M.setting.home) }));
 app.use(route.get("/view/:book/:file?", view));
-app.use(route.get("/locale/:locale", setLocale));
+// app.use(route.get("/locale/:locale", setLocale));
 app.use(route.post("/save/:book/:file", save));
 app.use(route.post("/signup", signup));
 app.use(route.get("/createbook/:book", createBook));
@@ -173,6 +186,12 @@ app.use(route.post("/createbook/:book", createBook));
 app.use(route.post("/login", login));
 app.use(route.post("/logout", logout));
 app.use(route.get("/search", search));
+app.use(route.get("/myarea", function*() { 
+  if (typeof this.session.user !== 'undefined')
+    this.redirect("/view/"+this.session.user+"/");
+  else
+    this.redirect("/view/system/error.html");
+}));
 app.use(route.get("/userlist", userList));
 
 co(function*() {

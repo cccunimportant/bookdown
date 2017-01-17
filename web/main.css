@@ -24,11 +24,18 @@ body {
 
 code {
   font-family:MingLiU, monospace;
+  padding:10px;
 }
 
 pre {
   border: 1px dotted #686868;
-  padding: 6px;
+  padding: 0px;
+}
+
+blockquote {
+  padding: 10px;
+  border: 3px double #373737;
+  color:#333333;  
 }
 
 a { 
