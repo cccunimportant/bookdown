@@ -6,8 +6,7 @@
 $ git clone https://github.com/ccckmit/bookdown.git
 $ cd bookdown
 $ npm install
-$ mongod          // if you would like to store data in mongodb
-$ node server
+$ node server // if you would like to store data in mongodb, start mongod before this command
 ```
 
 Visiting https://localhost/ for a demo site.
