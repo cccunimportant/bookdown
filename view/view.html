@@ -7,7 +7,7 @@
     <title>Bookdown: {{{book.title}}}</title>
   {{#if useLocal}}
     <link rel="stylesheet" href="/purecss/pure-min.css">
-    <link rel="stylesheet" href="/katex/katex.min.css">    
+    <link rel="stylesheet" href="/katex/katex.min.css">
     <link rel="stylesheet" href="/highlight/default.min.css">
   {{else}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.2/pure-min.css">
@@ -69,9 +69,7 @@
   </div>
 
   <div id="main">
-    <div class="content" id="viewBox">
-      {{{file.html}}}
-    </div>
+    <div class="content" id="viewBox">{{{file.html}}}</div>
     <div class="content" id="editBox">
       <br/>
       <textarea id="editText" name="editText">{{{file.text}}}</textarea>
@@ -84,12 +82,16 @@
   <script src="/purecss/ui.js"></script>
 {{#if useLocal}}
   <script src="/showdown/showdown.min.js"></script>
-  <script src="/katex/katex.min.js"></script>
-  <script src="/highlight/highlight.min.js"></script>
+  <script>
+  var katexJsUrl = "/katex/katex.min.js";
+  var highlightJsUrl = "/highlight/highlight.min.js";
+  </script>
 {{else}}
   <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.6.0/showdown.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.6.0/katex.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"></script>
+  <script>
+  var katexJsUrl = "https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.6.0/katex.min.js";
+  var highlightJsUrl = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js";
+  </script>
 {{/if}}
 </body>
 </html>

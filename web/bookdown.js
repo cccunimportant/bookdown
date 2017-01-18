@@ -26,7 +26,7 @@ function load(pBook, pFile) {
 		}
 	});
   
-  initDictionary('zh', zh);
+  addToDictionary('zh', zh);
   pageToLocale();
 }
 
@@ -44,27 +44,6 @@ function showBox(box) {
   viewBox.style.display = 'none';
   editBox.style.display = 'none';
   box.style.display = 'block';
-}
-
-function texRender(text) {
-  if (!katexLoaded && text.indexOf("$$")>=0) {
-    katexLoaded = true;
-  }
-  return text.replace(/(```\w*\n([\s\S]*?)\n```)|(`[^`\n]*`)|(\$\$\s*\n\s*([^$]+)\s*\n\s*\$\$)|(\$\$([^$\n]+)\$\$)/gmi, function(match, p1, p2, p3, p4, p5, p6, p7, offset, str) {
-//    console.log("match=%s p5=%s p7=%s", match, p5, p7);
-    try {
-      if (typeof p1 !== 'undefined') {
-        return match;
-//          return hljs.highlightBlock(p2);
-      } else if (typeof p3 !== 'undefined') {
-        return match;
-      } else if (typeof p4 !== 'undefined') {
-        return katex.renderToString(p5, { displayMode: true });      
-      } else if (typeof p6 !== 'undefined') {
-        return katex.renderToString(p7);
-      }
-    } catch (err) {}
-  });
 }
 
 function ajaxGet(path, getResponse) {
@@ -95,6 +74,50 @@ function ajaxPost(path, obj, callback) {
   r.send(JSON.stringify(obj));
 }
 
+var scriptLoaded = {}
+
+function loadScript(url, onload) {
+  var urlLoaded = scriptLoaded[url];
+  if (typeof urlLoaded !== 'undefined') {
+    onload();
+    return;
+  }
+  var script = document.createElement('script');
+  script.onload = onload;
+  script.src = url;
+  document.getElementsByTagName('head')[0].appendChild(script);
+  scriptLoaded[url] = true;
+}
+
+function texApply(text) {
+  return text.replace(/(```\w*\n([\s\S]*?)\n```)|(`[^`\n]*`)|(\$\$\s*\n\s*([^$]+)\s*\n\s*\$\$)|(\$\$([^$\n]+)\$\$)/gmi, function(match, p1, p2, p3, p4, p5, p6, p7, offset, str) {
+//    console.log("match=%s p5=%s p7=%s", match, p5, p7);
+    try {
+      if (typeof p1 !== 'undefined') {
+        return match;
+//          return hljs.highlightBlock(p2);
+      } else if (typeof p3 !== 'undefined') {
+        return match;
+      } else if (typeof p4 !== 'undefined') {
+        return katex.renderToString(p5, { displayMode: true });      
+      } else if (typeof p6 !== 'undefined') {
+        return katex.renderToString(p7);
+      }
+    } catch (err) {}
+  });          
+}
+
+function texRender(text, callback) {
+  if (text.indexOf("$$")>=0) {
+    loadScript(katexJsUrl, function() {
+      text = texApply(text);
+      callback(text);
+    });
+  } else {
+    callback(text);
+  }
+}
+
 function fileRender(text) {
   if (file.endsWith(".html"))
     return text;
@@ -110,21 +133,26 @@ function fileRender(text) {
 
 function codeHighlight() {
   var codes = document.querySelectorAll('pre code');
-  for (var i=0; i<codes.length; i++) {
-    hljs.highlightBlock(codes[i]);
+  if (codes.length > 0) {
+    loadScript(highlightJsUrl, function() {
+      for (var i=0; i<codes.length; i++) {
+        hljs.highlightBlock(codes[i]);
+      }
+    });
   }
 }
 
 function render() {
-  var html = texRender(textBox.value);
-  viewBox.innerHTML = fileRender(html);
-  codeHighlight();
+  texRender(textBox.value, function(text) {
+    viewBox.innerHTML = fileRender(text);
+    pageToLocale();
+    codeHighlight();
+  });
 }
 
 function view() {
   showBox(viewBox);
   render();
-  pageToLocale();
 }
 
 function edit() {
@@ -211,8 +239,8 @@ var zh = {
 
 var dictionary = {}
 
-function initDictionary(locale, dic) {
-  var d = {}
+function addToDictionary(locale, dic) {
+  var d = dictionary[locale] || {}
   for (var e in dic) {
     d[e.toLowerCase()] = dic[e];
   }

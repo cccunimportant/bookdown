@@ -2,13 +2,13 @@ title:陳鍾誠 @ Bookdown
 editor:ccc
 locale:zh
 chapters:
-title      | link
------------|---------
-陳鍾誠     | README.md
-課程地圖   | course.md
-書籍著作   | booklist.md
-程式作品   | codelist.md
-小說故事   | novel.md
-散文記事   | article.md
-論文研究   | paper.md
-十分鐘系列 | slide.md
+title      | link         | english
+-----------|--------------|----------
+陳鍾誠     | README.md    | C.C.Chen
+課程地圖   | course.md    | Course Map
+書籍著作   | booklist.md  | Book
+程式作品   | codelist.md  | Code
+小說故事   | novel.md     | Novel
+散文記事   | article.md   | Article
+論文研究   | paper.md     | Paper
+十分鐘系列 | slide.md     | Slide
