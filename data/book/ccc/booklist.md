@@ -1,3 +1,12 @@
+Book   | About
+-------|---------------------------
+[Learn Agile Programming](../learnagile/) | How to learn coding ?
+[JavaScript Programming](../jsh/) | use Node.js
+[Statistics](../st/) | use R
+[C# Programming](../csharp/) | use Window Forms
+[Bookdown Writing Guide](../bookdown/) | Write in Markdown
+
+chinese:
 書籍   | 說明
 -------|---------------------------
 [敏捷程式學習](../learnagile/) | 學習程式的方法

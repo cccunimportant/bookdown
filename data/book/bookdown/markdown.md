@@ -1,8 +1,33 @@
+# Level 1 title
+
+## Level 2 title
+
+### Level 3 title
+ 
+Inner Text, _Strong_ , *Strong*, **Super Strong**, __Super Strong__ , 
+
+Horizontal Line
+
+---
+
+Unordered List
+
+  * Item 1
+  * Item 2
+  * Item 3
+
+Ordered List
+
+  1. Item 1
+  2. Item 2
+  3. Item 3
+
+yahoo: [Yahoo](http://tw.yahoo.com/).
+
+![](CC-BY-SA_icon.svg)
+
+chinese:
 # 第1層標題
-
-f375 2222 7474 chen chung cheng
-
-hi , how are you !
 
 ## 第2層標題
 

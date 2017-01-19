@@ -12,3 +12,4 @@ Book                               |  Author
 [csharp](../csharp/) | [ccc](../ccc/)
 [ai](../ai/) | [ccc](../ccc/)
 [st](../st/) | [ccc](../ccc/)
+[slide](../slide/) | [ccc](../ccc/)

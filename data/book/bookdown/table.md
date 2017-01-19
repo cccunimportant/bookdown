@@ -1,3 +1,22 @@
+# Table
+
+Syntax：
+
+```
+| Name   | email               |
+|--------|---------------------|
+| Chung-Chen Chen | <ccckmit@gmail.com> |
+| Snoopy | <snoopy@gmail.com>  |
+```
+
+Show as：
+
+| Name   | email               |
+|--------|---------------------|
+| Chung-Chen Chen | <ccckmit@gmail.com> |
+| Snoopy | <snoopy@gmail.com>  |
+
+chinese:
 # 表格
 
 語法：

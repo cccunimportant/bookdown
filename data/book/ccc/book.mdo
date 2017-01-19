@@ -1,14 +1,14 @@
-title:陳鍾誠 @ Bookdown
+title:C.C.Chen @ Bookdown=陳鍾誠 @ Bookdown
 editor:ccc
-locale:zh
+locale:tw
 chapters:
-title      | link         | english
------------|--------------|----------
-陳鍾誠     | README.md    | C.C.Chen
-課程地圖   | course.md    | Course Map
-書籍著作   | booklist.md  | Book
-程式作品   | codelist.md  | Code
-小說故事   | novel.md     | Novel
-散文記事   | article.md   | Article
-論文研究   | paper.md     | Paper
-十分鐘系列 | slide.md     | Slide
+title                 | link
+----------------------|--------------
+C.C.Chen=陳鍾誠       | README.md
+Course=課程地圖       | course.md
+Book=書籍著作         | booklist.md
+Code=程式作品         | codelist.md
+Novel=小說故事        | novel.md
+Article=散文記事      | article.md
+Paper=論文研究        | paper.md
+Slide=十分鐘系列      | ../slide/

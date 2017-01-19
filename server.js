@@ -29,6 +29,7 @@ var response=function(self, code, msg) {
   res.status = code;
   res.set({"Content-Length":""+msgMt.length,"Content-Type":"text/plain"});
   res.body = msgMt;
+//  console.log("response:msg=%s", msgMt.substring(0, 100));
   console.log("response:msg=%s", msgMt);
 //  if (code !== 200) console.log("response error : ", code, msgMt);
 }
@@ -112,8 +113,9 @@ var signup = function *() {
 
 var search = function *() {
 	try {
-		var key = this.query.key||"", q = JSON.parse(this.query.q||"{}");
-		console.log("query=%j", this.query);
+		console.log("this.query = %j", this.query);
+		var key = this.query.key||"", q = JSON.parse(this.query.q || "{\"type\":\"md\"}");
+		console.log("key=%j q=%j", key, q);
 		var results = yield M.search(key, q);
 		response(this, 200, JSON.stringify(results));
 	} catch (e) {
@@ -186,7 +188,7 @@ app.use(route.post("/createbook/:book", createBook));
 app.use(route.post("/login", login));
 app.use(route.post("/logout", logout));
 app.use(route.get("/search", search));
-app.use(route.get("/myarea", function*() { 
+app.use(route.get("/profile", function*() { 
   if (typeof this.session.user !== 'undefined')
     this.redirect("/view/"+this.session.user+"/");
   else

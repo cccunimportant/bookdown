@@ -1,0 +1,28 @@
+title:C# 程式設計 -- 基礎、視窗與網路
+editor:ccc
+chapters:
+title        | link
+-------------|---------
+目錄         | README.md
+1. 簡介      | csharp.md
+2. 運算式    | varexp.md
+3. 流程控制  | ifloop.md
+4. 陣列      | array.md
+5. 函數      | function.md
+6. 物件導向  | object.md
+7. 例外處理  | exception.md
+8. 檔案處理  | file.md
+9. 資料結構  | datastructure.md
+10. 正規表達式  | regexp.md
+11. 作業系統  | thread.md
+12. 視窗程式  | window.md
+13. 時間驅動  | timer.md
+14. 文字編輯器  | editor.md
+15. 畫圖功能  | graphics.md
+16. 表格元件  | gridview.md
+17. 網路程式  | net.md
+18. UDP 程式  | udp.md
+19. TCP 程式  | tcp.md
+20. HTTP Server  | http.md
+21. HTTP Client  | web.md
+結語  | end.md

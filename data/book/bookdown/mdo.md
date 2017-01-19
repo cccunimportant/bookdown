@@ -1,3 +1,8 @@
+# MarkDown Object (MDO)
+
+Markdown has no object like JSON, so we extend it with an Markdown Object Format (MDO).
+
+Chinese:
 # 物件 (MarkDown Object, MDO)
 
 Markdown 當中沒有表達像 JSON 一樣的物件機制，因此不能表達階層性的東西。

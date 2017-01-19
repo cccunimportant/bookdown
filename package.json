@@ -12,7 +12,7 @@
     "koa-route": "^2.4.2",
     "koa-session": "^3.4.0",
     "koa-static": "^2.0.0",
-    "mdo": "^0.1.0",
+    "mdo": "^0.2.0",
     "mongodb": "^2.2.16",
     "mz": "^2.6.0",
     "object-hash": "^1.1.5",
