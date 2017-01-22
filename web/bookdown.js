@@ -13,10 +13,12 @@ function load(pBook, pFile) {
   searchBox = document.getElementById("searchBox");
   searchQuery = document.getElementById("searchQuery");
   localeNode = document.getElementById("locale");
-  
+  if (defaultLocale === '')
+    defaultLocale = "Global";
   window.onhashchange();
-  converter = new showdown.Converter();
-  converter.setOption('tables', true);
+//  converter = new showdown.Converter();
+//  converter.setOption('tables', true);
+  converter = window.markdownit(); // markdown-it
   searchQuery.addEventListener("keyup", function(event) {
     event.preventDefault();
     if (event.keyCode == 13) {
@@ -153,7 +155,8 @@ function fileRender(text) {
       if (localeChinese())
         md = chineseMt(md);
     }
-    return converter.makeHtml(md);
+//    return converter.makeHtml(md); // showdown.js
+    return converter.render(md); // markdown-it
   }
 }
 
@@ -169,15 +172,16 @@ function codeHighlight() {
 }
 
 var localeFull={
-  "":"🌐Global",
+  "":"Global",
   tw:"繁體中文",
   cn:"简体中文",
   en:"English",
 }
 
 function render() {
-  texRender(textBox.value, function(text) {
-    viewBox.innerHTML = fileRender(text);
+  var html = fileRender(textBox.value);
+  texRender(html, function(texHtml) {
+    viewBox.innerHTML = texHtml;
     menuToLocale();
     codeHighlight();
     searchBox.innerHTML = chineseMt(searchHtml);
@@ -185,6 +189,19 @@ function render() {
       localeNode.innerHTML = localeFull[localStorage.locale];
   });
 }
+
+/*
+
+function render() {
+//  texRender(textBox.value, function(text) {
+    viewBox.innerHTML = fileRender(text);
+    menuToLocale();
+    codeHighlight();
+    searchBox.innerHTML = chineseMt(searchHtml);
+    if (typeof localStorage.locale !== 'undefined')
+      localeNode.innerHTML = localeFull[localStorage.locale];
+//  });
+}*/
 
 function view() {
   showBox(viewBox);
@@ -239,8 +256,9 @@ var tw = {
   "home":"首頁",
   "book":"書籍",
   "search":"搜尋",
+  "user":"使用者",
   "locale":"語言",
-  "New 📖":"寫書",
+  "NewBook":"寫書",
   "users":"使用者",
   "books":"書籍",
   "Contents":"內容",
@@ -250,6 +268,7 @@ var tw = {
   "Password":"密碼",
   "Profile":"私人",
   "System":"系統",
+  "Global":"全球",
   "Error: Signup=false in Setting.mdo !":"錯誤:設定檔的 signup=false !", 
   "Please login to save!":"請先登入後才能存檔！",
   "Save fail: You are not editor of the book !":"存檔失敗：你不是本書的編輯！",

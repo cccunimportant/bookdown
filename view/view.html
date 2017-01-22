@@ -25,11 +25,11 @@
     <li class="pure-menu-item"><a href="README.md" class="pure-menu-link mt" data-mt="{{{book.title}}}">{{{book.title}}}</a></li>
     <input id="searchQuery" type="text" placeholder="search" size="10" style="border-radius: 5px;">
     <li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover">
-      <a id="me" class="pure-menu-link">
+      <a id="me" class="pure-menu-link mt" data-mt="User">
       {{#if user}}
         {{{user}}}
       {{else}}
-        👤
+        User
       {{/if}}
       </a>
       <ul class="pure-menu-children">
@@ -37,7 +37,7 @@
         <li class="pure-menu-item"><a onclick="view()" class="pure-menu-link mt" data-mt="View">View</a></li>
         <li class="pure-menu-item"><a onclick="edit()" class="pure-menu-link mt" data-mt="Edit">Edit</a></li>
         <li class="pure-menu-item"><a onclick="save()" class="pure-menu-link mt" data-mt="Save">Save</a></li>
-        <li class="pure-menu-item"><a href="/view/system/createBook.html" class="pure-menu-link mt" data-mt="New 📖">New 📖</a></li>
+        <li class="pure-menu-item"><a href="/view/system/createBook.html" class="pure-menu-link mt" data-mt="NewBook">NewBook</a></li>
         <li class="pure-menu-item"><a href="/view/system/login.html" class="pure-menu-link mt" data-mt="Login">Login</a></li>
         <li class="pure-menu-item"><a onclick="logout()" class="pure-menu-link mt" data-mt="Logout">Logout</a></li>
         <li class="pure-menu-item"><a href="/view/{{{book.editor}}}/" class="pure-menu-link mt" data-mt="Author">Author</a></li>
@@ -46,9 +46,9 @@
       </ul>
     </li>    
     <li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover">
-      <a id="locale" class="pure-menu-link mt" data-mt="Locale">Locale</a>
+      <a id="locale" class="pure-menu-link mt" data-mt="Global">Global</a>
       <ul class="pure-menu-children">
-        <li class="pure-menu-item"><a onclick="pageToLocale('')" class="pure-menu-link">🌐Global</a></li>
+        <li class="pure-menu-item"><a onclick="pageToLocale('')" class="pure-menu-link">Global</a></li>
         <li class="pure-menu-item"><a onclick="pageToLocale('en')" class="pure-menu-link">English</a></li>
         <li class="pure-menu-item"><a onclick="pageToLocale('tw')" class="pure-menu-link">繁體中文</a></li>
         <li class="pure-menu-item"><a onclick="pageToLocale('cn')" class="pure-menu-link">简体中文</a></li>
@@ -83,14 +83,16 @@
 
   <script src="/purecss/ui.js"></script>
 {{#if useLocal}}
-  <script src="/showdown/showdown.min.js"></script>
+<!--  <script src="/showdown/showdown.min.js"></script> -->
+  <script src="/markdown-it/markdown-it.min.js"></script>
   <script>
   var katexJsUrl = "/katex/katex.min.js";
   var highlightJsUrl = "/highlight/highlight.min.js";
   var defaultLocale = "{{book.locale}}";
   </script>
 {{else}}
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.6.0/showdown.min.js"></script>
+<!--  <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.6.0/showdown.min.js"></script> -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/8.2.2/markdown-it.min.js"></script>
   <script>
   var katexJsUrl = "https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.6.0/katex.min.js";
   var highlightJsUrl = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js";

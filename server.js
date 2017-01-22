@@ -30,7 +30,7 @@ var response=function(self, code, msg) {
   res.set({"Content-Length":""+msgMt.length,"Content-Type":"text/plain"});
   res.body = msgMt;
 //  console.log("response:msg=%s", msgMt.substring(0, 100));
-  console.log("response:msg=%s", msgMt);
+//  console.log("response:msg=%s", msgMt);
 //  if (code !== 200) console.log("response error : ", code, msgMt);
 }
 
